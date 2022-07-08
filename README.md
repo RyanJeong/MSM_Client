@@ -5,6 +5,7 @@ MSM Client for MSM project
 ```text
 $ flutter pub add mqtt_client
 $ flutter pub add flutter_local_notifications
+$ flutter pub add shared_preferences
 ```
 
 ## How to open 1883 port for MQTT testing
