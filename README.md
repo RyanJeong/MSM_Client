@@ -11,7 +11,17 @@ $ flutter pub add webview_flutter
 $ flutter pub add intl
 ```
 
-### Webview
+### Notification Setup
+* Android
+    * `webview/android/app/src/main/AndroidManifest.xml`
+    ```text
+    <activity
+        android:showWhenLocked="true"
+        android:turnScreenOn="true">
+    ```
+* [WIP] iOS
+
+### Webview Setup
 * Android
     * `webview/android/app/build.gradle`
     ```

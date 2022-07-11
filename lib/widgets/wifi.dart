@@ -26,17 +26,17 @@ class _WiFiViewState extends State<WiFiView> {
         title: const Text('WiFi Setup'),
       ),
       body: WebView(
-        /// TODO: temporary
-        /// initialUrl: Globals.webviewUrl,
-        initialUrl: 'https://www.google.com',
+        // for test
+        // initialUrl: 'https://www.google.com',
+        initialUrl: Globals.webviewUrl,
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController controller) {
           _controller = controller;
         },
         onPageFinished: (String url) {
-          /// TODO: temporary
-          /// if (url.contains('connect')) {
-          if (url.contains('search')) {
+          // for test
+          // if (url.contains('search')) {
+          if (url.contains('connect')) {
             _parseAndPop(url);
           }
         }
@@ -45,13 +45,13 @@ class _WiFiViewState extends State<WiFiView> {
   }
 
   void _parseAndPop(String url) async {
-    /// TODO: temporary
-    /// Globals.rasp = await _controller.runJavascriptReturningResult(
-    ///     "document.getElementById('serial1').innerHTML");  // r
-    /// Globals.app = await _controller.runJavascriptReturningResult(
-    ///     "document.getElementById('serial2').innerHTML");  // f
-    Globals.rasp = 'r';
-    Globals.app = 'f';
+    // for test
+    // Globals.rasp = 'r';
+    // Globals.app = 'f';
+    Globals.rasp = await _controller.runJavascriptReturningResult(
+        "document.getElementById('serial1').innerHTML");  // r
+    Globals.app = await _controller.runJavascriptReturningResult(
+        "document.getElementById('serial2').innerHTML");  // f
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('rasp', Globals.rasp);
     prefs.setString('app', Globals.app);

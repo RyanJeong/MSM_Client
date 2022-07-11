@@ -2,7 +2,9 @@ import 'package:intl/intl.dart';
 
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:msm_client/globals.dart';
 import 'package:msm_client/mqtt/state/MQTTAppState.dart';
+import 'package:msm_client/notification/notification.dart';
 
 class MQTTManager {
   // Private instance of client
@@ -93,9 +95,15 @@ class MQTTManager {
     print('EXAMPLE::Mosquitto client connected....');
     _client!.subscribe(_topic, MqttQos.atLeastOnce);
     _client!.updates!.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
-      DateTime now = DateTime.now();
-      String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
-      _currentState.setReceivedText('[$formattedDate] 고양이가 울어요!');
+      if (_identifier == Globals.sub) {
+        DateTime now = DateTime.now();
+        String formattedDate = DateFormat('kk:mm:ss EEE d MMM').format(now);
+        String msg = '고양이가 울어요!';
+        String text = '[$formattedDate] $msg';
+        _currentState.setReceivedText(text);
+        MQTTNotification notification = MQTTNotification();
+        notification.showNotification(msg);
+      }
     });
     print('EXAMPLE::OnConnected client callback - '
         'Client connection was sucessful');

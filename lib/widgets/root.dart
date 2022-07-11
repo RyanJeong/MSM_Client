@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:msm_client/widgets/wifi.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:msm_client/mqtt/MQTTManager.dart';
 import 'package:msm_client/mqtt/state/MQTTAppState.dart';
 import 'package:msm_client/globals.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RootView extends StatefulWidget {
   const RootView({Key? key}) : super(key: key);
@@ -34,6 +34,9 @@ class _RootViewState extends State<RootView> {
       Globals.rasp = (prefs.getString('rasp') ?? '');
       Globals.app = (prefs.getString('app') ?? '');
     });
+    /// TODO: fix me
+    print(Globals.rasp);
+    print(Globals.app);
   }
 
   @override
@@ -66,8 +69,8 @@ class _RootViewState extends State<RootView> {
                 _subState.getAppConnectionState)),
         _buildMQTTLogView(7,
             _subState.getHistoryText),
-        _buildWiFiButton(2),
-        _buildSpace(3)
+        _buildFunctionButtons(3),
+        _buildSpace(2)
       ]
     );
   }
@@ -131,7 +134,7 @@ class _RootViewState extends State<RootView> {
     _pubManager = MQTTManager(
         host: Globals.mqttUrl,
         topic: Globals.rasp,
-        identifier: 'MSM_PUB',
+        identifier: Globals.pub,
         state: _pubState
     );
     _pubManager.initializeMQTTClient();
@@ -139,7 +142,7 @@ class _RootViewState extends State<RootView> {
     _subManager = MQTTManager(
         host: Globals.mqttUrl,
         topic: Globals.app,
-        identifier: 'MSM_SUB',
+        identifier: Globals.sub,
         state: _subState
     );
     _subManager.initializeMQTTClient();
@@ -205,26 +208,36 @@ class _RootViewState extends State<RootView> {
     );
   }
 
-  Widget _buildWiFiButton(int f) {
+  Widget _buildFunctionButtons(int f) {
     return Flexible(
       flex: f,
       fit: FlexFit.tight,
       child: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Align(
-          alignment: Alignment.center,
-          child: ElevatedButton(
-            child: const Text('WiFi Setup'),
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WiFiView())
-              );
-              setState(() {
-                // TODO: implement it if needed
-              });
-            }
-          )
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                child: const Text('WiFi Setup'),
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const WiFiView())
+                  );
+                }
+              )
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: _pubState.getAppConnectionState ==
+                    MQTTAppConnectionState.connected ? () {
+                      _pubManager.publish('play it');
+                } : null,
+                child: const Text('Play')
+              )
+            )
+          ]
         )
       )
     );
@@ -236,19 +249,7 @@ class _RootViewState extends State<RootView> {
       fit: FlexFit.tight,
       child: Padding(
         padding: const EdgeInsets.all(5),
-        // TODO: temporary
-        // child: Container()
-        child: Align(
-          alignment: Alignment.center,
-          child: ElevatedButton(
-            onPressed: _pubState.getAppConnectionState ==
-                MQTTAppConnectionState.connected ?
-              () {
-                _pubManager.publish('play it');
-              } : null,
-            child: const Text('Publish')
-          )
-        )
+        child: Container()
       )
     );
   }
