@@ -34,6 +34,7 @@ class _RootViewState extends State<RootView> {
       Globals.rasp = (prefs.getString('rasp') ?? '');
       Globals.app = (prefs.getString('app') ?? '');
     });
+
     /// TODO: fix me
     print(Globals.rasp);
     print(Globals.app);

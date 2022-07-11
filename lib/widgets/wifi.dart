@@ -26,16 +26,12 @@ class _WiFiViewState extends State<WiFiView> {
         title: const Text('WiFi Setup'),
       ),
       body: WebView(
-        // for test
-        // initialUrl: 'https://www.google.com',
         initialUrl: Globals.webviewUrl,
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController controller) {
           _controller = controller;
         },
         onPageFinished: (String url) {
-          // for test
-          // if (url.contains('search')) {
           if (url.contains('connect')) {
             _parseAndPop(url);
           }
@@ -45,16 +41,13 @@ class _WiFiViewState extends State<WiFiView> {
   }
 
   void _parseAndPop(String url) async {
-    // for test
-    // Globals.rasp = 'r';
-    // Globals.app = 'f';
     Globals.rasp = await _controller.runJavascriptReturningResult(
         "document.getElementById('serial1').innerHTML");  // r
     Globals.app = await _controller.runJavascriptReturningResult(
         "document.getElementById('serial2').innerHTML");  // f
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('rasp', Globals.rasp);
-    prefs.setString('app', Globals.app);
+    prefs.setString('rasp', Globals.rasp.replaceAll('"', ''));
+    prefs.setString('app', Globals.app.replaceAll('"', ''));
 
     if (!mounted) {
       return;
