@@ -3,7 +3,7 @@
    <application
         android:label="msm_client"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/cat"
         android:usesCleartextTraffic="true">
        <activity
             android:name=".MainActivity"
