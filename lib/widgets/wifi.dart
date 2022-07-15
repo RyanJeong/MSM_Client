@@ -43,11 +43,13 @@ class _WiFiViewState extends State<WiFiView> {
   void _parseAndPop(String url) async {
     Globals.rasp = await _controller.runJavascriptReturningResult(
         "document.getElementById('serial1').innerHTML");  // r
+    Globals.rasp = Globals.rasp.replaceAll('"', '');
     Globals.app = await _controller.runJavascriptReturningResult(
         "document.getElementById('serial2').innerHTML");  // f
+    Globals.app = Globals.app.replaceAll('"', '');
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('rasp', Globals.rasp.replaceAll('"', ''));
-    prefs.setString('app', Globals.app.replaceAll('"', ''));
+    prefs.setString('rasp', Globals.rasp);
+    prefs.setString('app', Globals.app);
 
     if (!mounted) {
       return;

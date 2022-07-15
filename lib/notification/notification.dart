@@ -6,12 +6,13 @@ class MQTTNotification {
   MQTTNotification() {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
-    const AndroidInitializationSettings('ic_notification');
+        const AndroidInitializationSettings('ic_notification');
     var initializationSettingsIOS =
-    const IOSInitializationSettings();
+        const IOSInitializationSettings();
     var initializationSettings =
-    InitializationSettings(android: initializationSettingsAndroid,
-        iOS: initializationSettingsIOS);
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: null);
   }
@@ -25,9 +26,8 @@ class MQTTNotification {
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'ticker');
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
         0, text, null, platformChannelSpecifics,
         payload: 'item x');

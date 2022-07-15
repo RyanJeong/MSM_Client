@@ -13,6 +13,7 @@ class MQTTManager {
   final String _identifier;
   final String _host;
   final String _topic;
+  final MQTTNotification _notification;
 
   // Constructor
   // ignore: sort_constructors_first
@@ -24,7 +25,8 @@ class MQTTManager {
         _identifier = identifier,
         _host = host,
         _topic = topic,
-        _currentState = state;
+        _currentState = state,
+        _notification = MQTTNotification();
 
   void initializeMQTTClient() {
     _client = MqttServerClient(_host, _identifier);
@@ -101,8 +103,7 @@ class MQTTManager {
         String msg = '고양이가 울어요!';
         String text = '[$formattedDate] $msg';
         _currentState.setReceivedText(text);
-        MQTTNotification notification = MQTTNotification();
-        notification.showNotification(msg);
+        _notification.showNotification(msg);
       }
     });
     print('EXAMPLE::OnConnected client callback - '
